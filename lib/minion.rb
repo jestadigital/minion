@@ -133,7 +133,7 @@ module Minion
   end
 
   def direct_exchange
-    @@direct_exchange ||= bunny.exchange('')
+    @@direct_exchange ||= bunny.exchange('', :durable => true, :auto_delete => false)
   end
 
 	def next_job(args, response)
