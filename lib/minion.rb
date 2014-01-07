@@ -25,7 +25,7 @@ module Minion
 
 		encoded = JSON.dump(data)
 		log "send: #{queue}:#{encoded}"
-		bunny.queue(queue, :durable => true, :auto_delete => false).publish(encoded)
+    direct_exchange.publish(encoded, key: queue)
 	end
 
 	def log(msg)
@@ -130,7 +130,11 @@ module Minion
 
 	def bunny
 		@@bunny ||= new_bunny
-	end
+  end
+
+  def direct_exchange
+    @@direct_exchange ||= bunny.exchange('')
+  end
 
 	def next_job(args, response)
 		queue = args.delete("next_job")
